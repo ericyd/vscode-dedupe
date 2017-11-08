@@ -12,7 +12,7 @@ function activate(context) {
     function() {
       var activeEditor = vscode.window.activeTextEditor;
       var activeDoc = activeEditor.document;
-      var activeDocText = activeDoc.getText().toString();
+      var activeDocText = activeEditor.selection.isEmpty ? activeDoc.getText().toString() : activeDoc.getText(new vscode.Range(activeEditor.selection.start, activeEditor.selection.end)).toString();
 
       var dedupedText;
       try {
@@ -29,10 +29,10 @@ function activate(context) {
 
       try {
         return activeEditor.edit(editorEdit => {
-          var start = new vscode.Position(0, 0);
-          var end = new vscode.Position(activeDoc.lineCount + 1, 0);
-          editorEdit.delete(new vscode.Range(start, end));
-          editorEdit.replace(new vscode.Position(0, 0), dedupedText);
+          var start = activeEditor.selection.isEmpty ? new vscode.Position(0, 0) : activeEditor.selection.start;
+          var end = activeEditor.selection.isEmpty ? new vscode.Position(activeDoc.lineCount + 1, 0) : activeEditor.selection.end;
+          editorEdit.delete(new vscode.Range(start, end))
+          editorEdit.replace(new vscode.Position(start.line, 0), dedupedText);
         });
       } catch (e) {
         console.log('error!', e);
