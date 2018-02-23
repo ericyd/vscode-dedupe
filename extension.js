@@ -1,9 +1,5 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 var vscode = require("vscode");
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 function activate(context) {
   // formatter implemented using API
   // https://code.visualstudio.com/docs/extensionAPI/vscode-api#DocumentFormattingEditProvider
@@ -11,12 +7,10 @@ function activate(context) {
     "cfml",
     {
       provideDocumentFormattingEdits(
-        document,
-        options = {
-          insertSpaces: false,
-          tabSize: 4
-        }
+        document
       ) {
+        // get configuration settings from user
+        const config = vscode.workspace.getConfiguration().editor;
         const firstLineId = 0;
         const firstLine = document.lineAt(0);
         const lastLineId = document.lineCount - 1;
@@ -26,7 +20,7 @@ function activate(context) {
         vscode.commands.executeCommand("editor.action.trimTrailingWhitespace");
 
         // ensure indentation is consistent
-        vscode.commands.executeCommand(`editor.action.indentationTo${options.insertSpaces ? 'Spaces' : 'Tabs'}`);
+        vscode.commands.executeCommand(`editor.action.indentationTo${config.insertSpaces ? 'Spaces' : 'Tabs'}`);
 
         // TextEdit[] required for return param
         let edits = [];
@@ -41,7 +35,9 @@ function activate(context) {
             );
           }
 
-          // remove spaces more than 1
+          // remove spaces more than 1, e.g.
+          // `div  style=` --> `div style=`
+          // ?
         }
         return edits;
       }
