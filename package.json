@@ -1,22 +1,17 @@
 {
-  "name": "dedupe",
-  "displayName": "dedupe",
-  "description": "dedupe list of things",
+  "name": "cffmt",
+  "displayName": "cffmt",
+  "description": "format cf code",
   "version": "0.0.1",
   "publisher": "test",
   "engines": {
     "vscode": "^1.11.0"
   },
-  "categories": ["Other"],
-  "activationEvents": ["onCommand:extension.dedupe"],
+  "categories": ["Formatters"],
+  "activationEvents": ["*"],
   "main": "./extension",
   "contributes": {
-    "commands": [
-      {
-        "command": "extension.dedupe",
-        "title": "dedupe"
-      }
-    ]
+    
   },
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
